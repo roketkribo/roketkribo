@@ -6,7 +6,7 @@
 body {
     margin: 0;
     overflow: hidden;
-    background: #000;
+    background: radial-gradient(circle at top, #324f7a, #040712);
     color: #fff;
 }
 
@@ -36,12 +36,11 @@ canvas {
     display: none;
 }
 
-/* Overlay umumnya (menu & game over) */
+/* Overlay menu & game over */
 #mainMenu,
 #gameOverScreen {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle at top, rgba(60, 80, 150, 0.9), #000);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,7 +54,7 @@ canvas {
 /* BOX MENU & GAMEOVER */
 .menu-box,
 .go-box {
-    background: rgba(10, 10, 20, 0.9);
+    background: radial-gradient(circle at top, #25273a, #141520);
     border-radius: 16px;
     padding: 20px 22px;
     width: min(92vw, 420px);
