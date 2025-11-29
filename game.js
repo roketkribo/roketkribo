@@ -594,3 +594,4 @@ function gameLoop() {
 initRocket();
 resetGame();
 gameLoop();
+
