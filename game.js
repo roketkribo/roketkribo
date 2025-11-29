@@ -10,6 +10,9 @@ const API_URL =
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// 🔥 penting: stars dideklarasikan SEBELUM createStars dipanggil
+let stars = []; // array bintang background
+
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -66,8 +69,6 @@ let meteorSpeed = baseMeteorSpeed;
 let meteorSpawnCounter = 0;
 
 // ================== BACKGROUND: STARS & EARTH ==================
-let stars = [];
-
 function createStars() {
   stars = [];
   const count = Math.floor((canvas.width + canvas.height) / 15);
