@@ -1,17 +1,18 @@
 // ========================================================
-// ROKET KRIBO – FULL GAME WITH ONLINE LEADERBOARD
+// ROKET KRIBO – FULL GAME WITH ONLINE LEADERBOARD (JSONP)
 // ========================================================
 
 // ================== KONFIGURASI API LEADERBOARD ==================
 const API_URL =
   "https://script.google.com/macros/s/AKfycbzU6eZe0uNDjylpI_vWkF2dqVxNYTzfDJBBG6HOZctIFwQr5cL5A7QzyUV-HKYDCE66Ug/exec";
+// kalau setelah deploy Apps Script URL kamu berubah, ganti string di atas
 
 // ================== CANVAS SETUP ==================
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// 🔥 penting: stars dideklarasikan SEBELUM createStars dipanggil
-let stars = []; // array bintang background
+// array bintang background (harus dideklarasikan sebelum createStars dipanggil)
+let stars = [];
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -143,7 +144,7 @@ function drawEarth() {
   ctx.fill();
 }
 
-// ================== LEADERBOARD ONLINE ==================
+// ================== LEADERBOARD ONLINE (JSONP, no CORS) ==================
 function formatDateTime(ts) {
   const d = new Date(ts);
   const date = d.toLocaleDateString(undefined, {
@@ -158,11 +159,34 @@ function formatDateTime(ts) {
   return `${date} ${time}`;
 }
 
+// helper JSONP
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = "jsonp_cb_" + Math.random().toString(36).slice(2);
+    const script = document.createElement("script");
+
+    window[cbName] = (data) => {
+      resolve(data);
+      delete window[cbName];
+      script.remove();
+    };
+
+    script.onerror = () => {
+      delete window[cbName];
+      script.remove();
+      reject(new Error("JSONP request error"));
+    };
+
+    script.src =
+      url + (url.includes("?") ? "&" : "?") + "callback=" + cbName;
+    document.body.appendChild(script);
+  });
+}
+
+// ambil leaderboard TOP 10
 async function fetchLeaderboard() {
   try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
+    const data = await jsonp(API_URL + "?mode=read");
     return Array.isArray(data) ? data : [];
   } catch (e) {
     console.error("Fetch leaderboard error:", e);
@@ -170,16 +194,17 @@ async function fetchLeaderboard() {
   }
 }
 
-async function sendScore(nick, score) {
-  try {
-    await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nick, score }),
-    });
-  } catch (e) {
+// kirim skor (return Promise supaya bisa .then)
+function sendScore(nick, score) {
+  return jsonp(
+    API_URL +
+      "?mode=write&nick=" +
+      encodeURIComponent(nick) +
+      "&score=" +
+      encodeURIComponent(score)
+  ).catch((e) => {
     console.error("Send score error:", e);
-  }
+  });
 }
 
 function renderLeaderboard(list) {
@@ -206,7 +231,7 @@ async function refreshLeaderboard() {
   }
 }
 
-// panggil sekali di awal
+// panggil sekali di awal load
 refreshLeaderboard();
 
 // ================== ROKET ==================
@@ -519,7 +544,7 @@ async function gameOver() {
 
   // kirim skor ke server & refresh leaderboard
   sendScore(currentNickname, score)
-    .then(refreshLeaderboard)
+    .then(() => refreshLeaderboard())
     .catch((e) => console.error(e));
 
   hud.classList.add("hidden");
