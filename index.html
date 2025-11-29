@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- HUD saat bermain -->
+
+    <!-- HUD saat game dimainkan -->
     <div id="hud" class="hidden">
         <div>Score: <span id="score">0</span></div>
         <div>Best: <span id="bestScore">0</span></div>
     </div>
 
-    <!-- Canvas game -->
+    <!-- CANVAS GAME -->
     <canvas id="gameCanvas"></canvas>
 
     <!-- MENU UTAMA -->
@@ -25,7 +26,7 @@
             <label for="nicknameInput">Nickname</label>
             <input id="nicknameInput" type="text" maxlength="12" placeholder="Isi nickname..." />
 
-            <button id="startBtn">Start</button>
+            <button id="startBtn" onclick="startGame()">Start</button>
 
             <h2>Papan Leaderboard</h2>
             <div class="table-wrapper">
@@ -39,14 +40,14 @@
                         </tr>
                     </thead>
                     <tbody id="leaderboardBody">
-                        <!-- diisi via JS -->
+                        <!-- diisi otomatis oleh JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- GAME OVER -->
+    <!-- GAME OVER SCREEN -->
     <div id="gameOverScreen" class="hidden">
         <div class="go-box">
             <h1>Game Over</h1>
