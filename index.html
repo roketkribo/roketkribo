@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roket Kribo</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- HUD saat bermain -->
+    <div id="hud" class="hidden">
+        <div>Score: <span id="score">0</span></div>
+        <div>Best: <span id="bestScore">0</span></div>
+    </div>
+
+    <!-- Canvas game -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- MENU UTAMA -->
+    <div id="mainMenu">
+        <div class="menu-box">
+            <h1>Roket Kribo</h1>
+            <p class="subtitle">Tap / klik untuk lompat, hindari tiang meteor!</p>
+
+            <label for="nicknameInput">Nickname</label>
+            <input id="nicknameInput" type="text" maxlength="12" placeholder="Isi nickname..." />
+
+            <button id="startBtn">Start</button>
+
+            <h2>Papan Leaderboard</h2>
+            <div class="table-wrapper">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nickname</th>
+                            <th>Score</th>
+                            <th>Tanggal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- diisi via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="gameOverScreen" class="hidden">
+        <div class="go-box">
+            <h1>Game Over</h1>
+            <p>Nickname: <span id="finalNickname">-</span></p>
+            <p>Score kamu: <span id="finalScore">0</span></p>
+
+            <button id="retryBtn">Main Lagi</button>
+            <button id="backMenuBtn">Menu Utama</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
